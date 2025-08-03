@@ -1,54 +1,43 @@
-import { Message } from "typegram";
 import { Telegraf } from "telegraf";
 
 import config from "./config";
 
-import { toEscapeHTMLMsg } from "./utils/messageHandler";
 import { printBotInfo } from "./utils/consolePrintUsername";
+import { getSecondImageUrl } from "./utils/fetch-site";
+import { overwriteLastImg, readLastImg } from "./utils/file-db";
 
 import bot from "./lib/bot";
-import helper from "./commands/helper";
-import echo from "./commands/echo";
-import catchAll from "./commands/catch-all";
 
-const index = () => {
+const index = async () => {
   bot.use(Telegraf.log());
-  bot.use((ctx, next) => {
-    if (
-      ctx.message &&
-      config.LOG_GROUP_ID &&
-      ctx.message.from.username != config.OWNER_USERNAME
-    ) {
-      let userInfo: string;
-      if (ctx.message.from.username) {
-        userInfo = `name: <a href="tg://user?id=${
-          ctx.message.from.id
-        }">${toEscapeHTMLMsg(ctx.message.from.first_name)}</a> (@${
-          ctx.message.from.username
-        })`;
-      } else {
-        userInfo = `name: <a href="tg://user?id=${
-          ctx.message.from.id
-        }">${toEscapeHTMLMsg(ctx.message.from.first_name)}</a>`;
-      }
-      const text = `\ntext: ${
-        (ctx.message as Message.TextMessage).text
-      }`;
-      const logMessage = userInfo + toEscapeHTMLMsg(text);
-      bot.telegram.sendMessage(config.LOG_GROUP_ID, logMessage, {
-        parse_mode: "HTML",
-      });
-    }
-    return next();
-  });
   bot.launch();
   printBotInfo(bot);
 
-  helper();
-  echo();
+  const imageUrl = await getSecondImageUrl();
 
-  //Catch all unknown messages/commands
-  catchAll();
+  if (imageUrl) {
+    console.log("Second image URL:", imageUrl);
+  } else {
+    console.log("No second image found.");
+  }
+
+  const lastImg = await readLastImg();
+
+  if (lastImg != imageUrl) {
+    if (config.POST_GROUP_ID === undefined) {
+      throw new Error("CHANNEL must be provided!");
+    }
+    if (imageUrl !== null) {
+      bot.telegram
+        .sendPhoto(config.POST_GROUP_ID, imageUrl)
+        .then(() => {
+          console.log("message sent!");
+        });
+      overwriteLastImg(imageUrl);
+    }
+  } else {
+    console.log("Send Image, skipping")
+  }
 };
 
 index();

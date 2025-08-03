@@ -1,38 +1,36 @@
 {
-  "name": "telegraf-sqlite-template",
+  "name": "wp-to-telegram",
   "version": "0.1.1",
   "description": "Template for creating future telegram bot apps",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "npm run generate && npm run deploy && tsc -p .",
-    "dev": "nodemon src/index.ts",
-    "generate": "prisma generate",
-    "deploy": "prisma migrate deploy",
-    "migrate": "prisma migrate dev",
-    "reset": "prisma migrate reset"
+    "build": "tsc -p .",
+    "dev": "nodemon src/index.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/francisyzy/telegraf-sqlite-template.git"
+    "url": "git+https://github.com/francisyzy/wp-to-telegram.git"
   },
   "author": "francisyzy",
   "bugs": {
-    "url": "https://github.com/francisyzy/telegraf-sqlite-template/issues"
+    "url": "https://github.com/francisyzy/wp-to-telegram/issues"
   },
-  "homepage": "https://github.com/francisyzy/telegraf-sqlite-template#readme",
+  "homepage": "https://github.com/francisyzy/wp-to-telegram#readme",
   "engines": {
-    "node": "18.x"
+    "node": "20.18.0"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
+    "axios": "^1.11.0",
+    "cheerio": "^1.1.0",
     "dotenv": "^16.0.3",
     "telegraf": "^4.12.2"
   },
   "devDependencies": {
-    "@types/node": "^18",
+    "@types/node": "^20",
     "@types/qrcode-terminal": "^0.12.0",
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.1.10",
     "prettier": "^2.8.8",
     "prisma": "^4.14.0",
     "qrcode-terminal": "^0.12.0",

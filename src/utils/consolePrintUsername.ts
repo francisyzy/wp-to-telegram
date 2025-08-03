@@ -7,7 +7,7 @@ import qrcode from "qrcode-terminal";
  * @returns {Promise<number>} number of possible bosses from information given
  */
 export async function printBotInfo(
-  bot: Telegraf<Scenes.WizardContext<Scenes.WizardSessionData>>,
+  bot: Telegraf,
 ): Promise<void> {
   const botMe = await bot.telegram.getMe();
   console.log(
