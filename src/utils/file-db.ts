@@ -7,7 +7,7 @@ export async function readLastImg() {
   const filePath = path.resolve(__dirname, dbPath);
   try {
     const data = await fs.readFile(filePath, 'utf-8');
-    console.log('File content:', data);
+    // console.log('File content:', data);
     return data;
   } catch (err) {
     console.error('Error reading file:', err);

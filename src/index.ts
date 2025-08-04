@@ -11,14 +11,21 @@ import bot from "./lib/bot";
 const index = async () => {
   bot.use(Telegraf.log());
   bot.launch();
-  printBotInfo(bot);
+  if (process.env.NODE_ENV != 'production') {
+    printBotInfo(bot);
+  }
 
   const imageUrl = await getSecondImageUrl();
 
   if (imageUrl) {
-    console.log("Second image URL:", imageUrl);
+    // console.log("Second image URL:", imageUrl);
   } else {
     console.log("No second image found.");
+    if (config.OWNER_ID !== undefined) {
+      bot.telegram.sendMessage(config.OWNER_ID, "Fail to send image").then(() => {
+        console.log("error sent!");
+      });
+    }
   }
 
   const lastImg = await readLastImg();
@@ -36,7 +43,7 @@ const index = async () => {
       overwriteLastImg(imageUrl);
     }
   } else {
-    console.log("Send Image, skipping")
+    console.log("Image previously sent, skipping");
   }
 };
 
