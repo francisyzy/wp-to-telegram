@@ -11,7 +11,7 @@ import bot from "./lib/bot";
 const index = async () => {
   bot.use(Telegraf.log());
   bot.launch();
-  if (process.env.NODE_ENV != 'production') {
+  if (process.env.NODE_ENV != "production") {
     printBotInfo(bot);
   }
 
@@ -22,9 +22,11 @@ const index = async () => {
   } else {
     console.log("No second image found.");
     if (config.OWNER_ID !== undefined) {
-      bot.telegram.sendMessage(config.OWNER_ID, "Fail to send image").then(() => {
-        console.log("error sent!");
-      });
+      bot.telegram
+        .sendMessage(config.OWNER_ID, "Fail to send image")
+        .then(() => {
+          console.log("error sent!");
+        });
     }
   }
 
@@ -45,10 +47,9 @@ const index = async () => {
   } else {
     console.log("Image previously sent, skipping");
   }
+
+  await bot.stop(); // Stop the bot gracefully
+  process.exit(0); // Exit the process
 };
 
 index();
-
-// Enable graceful stop
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));

@@ -4,8 +4,7 @@ Scrapes a WP site (currently configured to the second image of the site) and pos
 
 Instead of using node cron, I will run it via crontab
 
-`4 10 * * * cd /home/tg/wp-to-telegram && npm run start`
-`* * * * * cd /home/tg/wp-to-telegram && npm run start`
+`4 10 * * * cd /home/tg/wp-to-telegram && ./nvm-run.sh >> /tmp/logs`
 
 ## Built with
 
